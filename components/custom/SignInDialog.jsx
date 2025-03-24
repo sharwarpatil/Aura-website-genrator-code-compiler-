@@ -9,12 +9,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import axios from "axios";
+import uuid4 from "uuid4";
+
 import { useGoogleLogin } from "@react-oauth/google";
 import LookUp from "@/data/LookUp";
 import { UserDetailsContext } from "@/context/UserDetailsContext";
-
-function SignInDialog(openDialog, closeDialog) {
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+function SignInDialog({ openDialog, closeDialog }) {
   const { userDetail, setUserDetail } = useContext(UserDetailsContext);
+  const CreateUser = useMutation(api.users.CreateUser);
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse);
@@ -24,8 +28,18 @@ function SignInDialog(openDialog, closeDialog) {
       );
 
       console.log(userInfo);
+      const user = userInfo.data;
+      await CreateUser({
+        name: user?.name,
+        email: user?.email,
+        picture: user?.picture,
+        uid: uuid4(), // Google uses 'sub' as a unique ID
+      });
+      if (typeof window !== undefined) {
+        localStorage.setItem("user", JSON.stringify(user));
+      }
       setUserDetail(userInfo?.data);
-      //save for database
+      //save for datab  ase
       closeDialog(false);
     },
     onError: (errorResponse) => console.log(errorResponse),

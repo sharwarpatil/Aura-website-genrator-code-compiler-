@@ -6,22 +6,55 @@ import LookUp from "@/data/LookUp";
 import { ArrowRight } from "lucide-react";
 import React, { useContext, useState } from "react";
 import SignInDialog from "./SignInDialog";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useRouter } from "next/navigation";
 
 function Hero() {
-  const { userInput, setUserInput } = useState("");
-  const { messages, setMessages } = useState(MessagesContext);
+  const [userInput, setUserInput] = useState("");
+  const { messages, setMessages } = useContext(MessagesContext);
   const { userDetail, setUserDetail } = useContext(UserDetailsContext);
   const [openDialog, setOpenDialog] = useState(false);
-  const onGenerate = (input) => {
+  const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);
+  const router = useRouter();
+  const onGenerate = async (input) => {
     if (!userDetail?.name) {
       setOpenDialog(true);
       return;
     }
-    setMessages({
+    const msg = {
       role: "user",
       content: input,
+    };
+    setMessages(msg);
+    const workspaceId = await CreateWorkspace({
+      user: userDetail._id,
+      messages: [msg],
     });
+    console.log(workspaceId);
+    router.push("/workspace/" + workspaceId);
   };
+  // const onGenerate = async (input) => {
+  //   if (!userDetail?.name || !userDetail?._id) {
+  //     console.error("User not found or missing ID:", userDetail);
+  //     setOpenDialog(true);
+  //     return;
+  //   }
+
+  //   const msg = { role: "user", content: input };
+  //   setMessages(msg);
+
+  //   try {
+  //     const workspaceId = await CreateWorkspace({
+  //       user: userDetail._id, // Ensure this is defined
+  //       messages: [msg],
+  //     });
+  //     console.log("Workspace Created:", workspaceId);
+  //     router.push("workspace" + workspaceId);
+  //   } catch (error) {
+  //     console.error("Error creating workspace:", error);
+  //   }
+  // };
 
   return (
     <div className=" flex flex-col items-center mt-36 xl:mt42 gap-2">
@@ -35,7 +68,7 @@ function Hero() {
           <textarea
             placeholder={LookUp.INPUT_PLACEHOLDER}
             onChange={(event) => setUserInput(event.target.value)}
-            className=" outline-none bg-transparent w-full h-32 max-h-56 resize-none"
+            className="outline-none bg-transparent w-full h-32 max-h-56 resize-none"
           />
           <ArrowRight
             onClick={() => onGenerate(userInput)}
