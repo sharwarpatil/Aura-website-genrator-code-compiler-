@@ -18,6 +18,7 @@ function Hero() {
   const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);
   const router = useRouter();
   const onGenerate = async (input) => {
+    console.log("IMPPPPPP- User Detail in onGenerate:", userDetail);
     if (!userDetail?.name) {
       setOpenDialog(true);
       return;
@@ -32,8 +33,9 @@ function Hero() {
       messages: [msg],
     });
     console.log(workspaceId);
-    router.push("/workspace/" + workspaceId);
+    router.push("/workspace/" + workspaceId); // Add the leading slash
   };
+
   // const onGenerate = async (input) => {
   //   if (!userDetail?.name || !userDetail?._id) {
   //     console.error("User not found or missing ID:", userDetail);
