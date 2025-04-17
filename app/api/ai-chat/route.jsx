@@ -21,6 +21,7 @@ export async function POST(req) {
     const { prompt } = await req.json();
     console.log("Received prompt:", prompt);
 
+    // const result = await chatSession.sendMessage(prompt);
     const result = await chatSession.sendMessage(prompt);
     console.log("AI Model Response:", result);
 
@@ -28,10 +29,10 @@ export async function POST(req) {
       throw new Error("No valid response from AI model.");
     }
 
-    const resp = await result.response.text();
-    console.log("Processed AI Response:", resp);
+    const AIresp = await result.response.text();
+    console.log("Processed AI Response:", AIresp);
 
-    return NextResponse.json({ result: resp });
+    return NextResponse.json({ result: AIresp });
   } catch (e) {
     console.error("API Error:", e);
     return NextResponse.json({ error: e.message || "Unknown error" });
