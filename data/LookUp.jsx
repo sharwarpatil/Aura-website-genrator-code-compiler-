@@ -78,6 +78,7 @@ import dedent from "dedent";
 //     "react-chartjs-2": "^5.3.0",
 //     "chart.js": "^4.4.7",
 //   },
+
 export default {
   SUGGSTIONS: [
     "Create ToDo App in React",
@@ -96,64 +97,38 @@ export default {
     "By using AURA, you agree to the collection of usage data for analytics.",
 
   DEFAULT_FILE: {
-    "/App.js": {
-      code: `import React from "react";
-import "./App.css";
-
-export default function App() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="p-8 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">
-          Welcome to AURA
-        </h1>
-        <p className="text-gray-600">
-          Ask me to generate React code for you and see it live here!
-        </p>
-      </div>
-    </div>
-  );
-}`,
-    },
-    "/src/index.js": {
-      code: `import React from "react";
-import { createRoot } from "react-dom/client";
-import App from "../App";
-
-const rootElement = document.getElementById("root");
-const root = createRoot(rootElement);
-
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);`,
-    },
     "/public/index.html": {
       code: `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA - AI-generated React App</title>
+    <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
     <div id="root"></div>
   </body>
 </html>`,
-    },
-    "/App.css": {
-      code: `@tailwind base;
+    }, //
+    "./App.js": {
+      code: `import App1 from "./src/App";
+export default function App() {
+  return <App1 />;
+}`,
+    }, //
+    "./App.css": {
+      code: `
+            @tailwind base;
 @tailwind components;
 @tailwind utilities;`,
     },
     "/tailwind.config.js": {
-      code: `/** @type {import('tailwindcss').Config} */
+      code: `
+            /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {},
@@ -169,12 +144,11 @@ const config = {
   },
 };
 
-export default config;`,
+export default config;
+`,
     },
   },
   DEPENDANCY: {
-    react: "^18.2.0",
-    "react-dom": "^18.2.0",
     postcss: "^8",
     tailwindcss: "^3.4.1",
     autoprefixer: "^10.0.0",

@@ -169,6 +169,7 @@ function Codeview() {
             ...LookUp.DEPENDANCY,
           },
         }}
+        
         options={{
           externalResources: ["https://cdn.tailwindcss.com/"],
         }}
